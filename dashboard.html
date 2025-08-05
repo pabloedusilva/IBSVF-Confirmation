@@ -1043,9 +1043,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializa o banco de dados
-            const dbPromise = initDB();
-            
             // Elementos do DOM
             const participantsTableBody = document.getElementById('participantsTableBody');
             const searchInput = document.getElementById('searchInput');
@@ -1053,6 +1050,7 @@
             const filterDropdown = document.querySelector('.filter-dropdown');
             const filterBtn = document.querySelector('.filter-btn');
             const emptyState = document.getElementById('emptyState');
+            const exportBtn = document.querySelector('.export-btn');
             
             // Elementos de dropdown do usuário
             const userDropdown = document.getElementById('userDropdown');
@@ -1132,6 +1130,35 @@
             let currentParticipantId = null;
             let participants = [];
             
+            // Funcionalidade de exportação
+            exportBtn.addEventListener('click', function() {
+                exportToCSV();
+            });
+
+            function exportToCSV() {
+                if (participants.length === 0) {
+                    alert('Não há dados para exportar.');
+                    return;
+                }
+
+                const csvContent = 'data:text/csv;charset=utf-8,' 
+                    + 'Nome,Status,Acompanhantes,Data\n'
+                    + participants.map(p => {
+                        const companionsStr = p.companions && p.companions.length > 0 ? p.companions.join('; ') : 'Nenhum';
+                        const date = p.date ? new Date(p.date).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
+                        const status = p.attendance === 'yes' ? 'Confirmado' : 'Não Confirmado';
+                        return `"${p.name}","${status}","${companionsStr}","${date}"`;
+                    }).join('\n');
+
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', `participantes_family_day_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
             // Carrega os dados iniciais
             loadParticipants();
             
@@ -1227,14 +1254,18 @@
             // Fechar modal de edição
             closeEditModal.addEventListener('click', closeModal);
             cancelEdit.addEventListener('click', closeModal);
+            editModal.addEventListener('click', function(e) {
+                if (e.target === editModal) closeModal();
+            });
+            
+            // Fechar modal de exclusão ao clicar no overlay
+            deleteModal.addEventListener('click', function(e) {
+                if (e.target === deleteModal) closeModal();
+            });
             
             function closeModal() {
                 editModal.classList.remove('show');
                 deleteModal.classList.remove('show');
-                setTimeout(() => {
-                    editModal.classList.add('hidden');
-                    deleteModal.classList.add('hidden');
-                }, 300);
             }
             
             // Salvar edição
@@ -1244,8 +1275,7 @@
                     return;
                 }
                 
-                const updatedParticipant = {
-                    id: currentParticipantId,
+                const updatedData = {
                     name: editNameInput.value.trim(),
                     attendance: document.querySelector('input[name="editAttendance"]:checked').value,
                     companions: []
@@ -1256,27 +1286,14 @@
                     const companionInputs = companionsList.querySelectorAll('.companion-input');
                     companionInputs.forEach(input => {
                         if (input.value.trim()) {
-                            updatedParticipant.companions.push(input.value.trim());
+                            updatedData.companions.push(input.value.trim());
                         }
                     });
                 }
                 
-                // Atualizar no banco de dados
-                dbPromise.then(db => {
-                    const transaction = db.transaction('participants', 'readwrite');
-                    const store = transaction.objectStore('participants');
-                    
-                    const request = store.put(updatedParticipant);
-                    
-                    request.onsuccess = function() {
-                        loadParticipants();
-                        closeModal();
-                    };
-                    
-                    request.onerror = function() {
-                        alert('Erro ao atualizar participante. Por favor, tente novamente.');
-                    };
-                });
+                // Atualizar participante
+                editParticipant(currentParticipantId, updatedData);
+                closeModal();
             });
             
             // Modal de exclusão
@@ -1289,140 +1306,37 @@
             cancelDelete.addEventListener('click', closeModal);
             
             confirmDelete.addEventListener('click', function() {
-                dbPromise.then(db => {
-                    const transaction = db.transaction('participants', 'readwrite');
-                    const store = transaction.objectStore('participants');
-                    
-                    const request = store.delete(currentParticipantId);
-                    
-                    request.onsuccess = function() {
-                        loadParticipants();
-                        closeModal();
-                    };
-                    
-                    request.onerror = function() {
-                        alert('Erro ao excluir participante. Por favor, tente novamente.');
-                    };
-                });
+                deleteParticipant(currentParticipantId);
+                closeModal();
             });
             
-            // Inicializar banco de dados IndexedDB
-            function initDB() {
-                return new Promise((resolve, reject) => {
-                    const request = indexedDB.open('FamilyDayDB', 1);
-                    
-                    request.onupgradeneeded = function(event) {
-                        const db = event.target.result;
-                        
-                        // Criar object store para participantes
-                        const participantsStore = db.createObjectStore('participants', { keyPath: 'id', autoIncrement: true });
-                        
-                        // Criar índices para busca rápida
-                        participantsStore.createIndex('name', 'name', { unique: false });
-                        participantsStore.createIndex('attendance', 'attendance', { unique: false });
-                    };
-                    
-                    request.onsuccess = function(event) {
-                        resolve(event.target.result);
-                        
-                        // Adicionar dados de exemplo se o banco estiver vazio
-                        checkIfEmptyAndAddSampleData(event.target.result);
-                    };
-                    
-                    request.onerror = function(event) {
-                        console.error('Erro ao abrir o banco de dados:', event.target.error);
-                        reject(event.target.error);
-                    };
-                });
-            }
-            
-            // Verificar se o banco está vazio e adicionar dados de exemplo
-            function checkIfEmptyAndAddSampleData(db) {
-                const transaction = db.transaction('participants', 'readonly');
-                const store = transaction.objectStore('participants');
-                const countRequest = store.count();
-                
-                countRequest.onsuccess = function() {
-                    if (countRequest.result === 0) {
-                        addSampleData(db);
-                    }
-                };
-            }
-            
-            // Adicionar dados de exemplo
-            function addSampleData(db) {
-                const sampleData = [
-                    {
-                        name: 'João Silva',
-                        attendance: 'yes',
-                        companions: ['Maria Silva', 'Pedro Silva'],
-                        date: new Date('2023-06-15').toISOString()
-                    },
-                    {
-                        name: 'Ana Oliveira',
-                        attendance: 'yes',
-                        companions: ['Carlos Oliveira'],
-                        date: new Date('2023-06-14').toISOString()
-                    },
-                    {
-                        name: 'Marcos Souza',
-                        attendance: 'no',
-                        companions: [],
-                        date: new Date('2023-06-13').toISOString()
-                    },
-                    {
-                        name: 'Patrícia Lima',
-                        attendance: 'yes',
-                        companions: [],
-                        date: new Date('2023-06-16').toISOString()
-                    },
-                    {
-                        name: 'Ricardo Alves',
-                        attendance: 'yes',
-                        companions: ['Fernanda Alves', 'Lucas Alves', 'Sophia Alves'],
-                        date: new Date('2023-06-12').toISOString()
-                    },
-                    {
-                        name: 'Juliana Costa',
-                        attendance: 'no',
-                        companions: [],
-                        date: new Date('2023-06-11').toISOString()
-                    }
-                ];
-                
-                const transaction = db.transaction('participants', 'readwrite');
-                const store = transaction.objectStore('participants');
-                
-                sampleData.forEach(participant => {
-                    store.add(participant);
-                });
-                
-                transaction.oncomplete = function() {
-                    loadParticipants();
-                };
-            }
-            
-            // Carregar participantes do banco de dados
+            // Carregar participantes do localStorage
             function loadParticipants() {
-                dbPromise.then(db => {
-                    const transaction = db.transaction('participants', 'readonly');
-                    const store = transaction.objectStore('participants');
-                    const request = store.getAll();
-                    
-                    request.onsuccess = function() {
-                        participants = request.result;
-                        updateStatistics(participants);
-                        renderParticipants();
-                    };
-                    
-                    request.onerror = function() {
-                        console.error('Erro ao carregar participantes:', request.error);
-                    };
-                });
+                try {
+                    const stored = localStorage.getItem('familyDayParticipants');
+                    participants = stored ? JSON.parse(stored) : [];
+                    updateStatistics();
+                    renderParticipants();
+                } catch (error) {
+                    console.error('Erro ao carregar participantes:', error);
+                    participants = [];
+                    updateStatistics();
+                    renderParticipants();
+                }
             }
-            
+
+            // Salvar participantes no localStorage
+            function saveParticipants() {
+                try {
+                    localStorage.setItem('familyDayParticipants', JSON.stringify(participants));
+                    updateStatistics();
+                } catch (error) {
+                    console.error('Erro ao salvar participantes:', error);
+                }
+            }
+
             // Atualizar estatísticas
-            function updateStatistics(participants) {
+            function updateStatistics() {
                 const confirmed = participants.filter(p => p.attendance === 'yes').length;
                 const notConfirmed = participants.filter(p => p.attendance === 'no').length;
                 
@@ -1438,7 +1352,24 @@
                 totalPeopleEl.textContent = totalPeople;
                 familiesCountEl.textContent = participants.length;
             }
-            
+
+            // Deletar participante
+            function deleteParticipant(id) {
+                participants = participants.filter(p => p.id !== id);
+                saveParticipants();
+                renderParticipants();
+            }
+
+            // Editar participante
+            function editParticipant(id, updatedData) {
+                const index = participants.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    participants[index] = { ...participants[index], ...updatedData };
+                    saveParticipants();
+                    renderParticipants();
+                }
+            }
+
             // Renderizar lista de participantes
             function renderParticipants() {
                 let filteredParticipants = [...participants];

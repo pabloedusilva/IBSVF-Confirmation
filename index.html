@@ -698,14 +698,41 @@
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Simular envio (em uma aplicação real, você enviaria para um servidor)
-                setTimeout(() => {
-                    // Mostrar modal ao invés da seção
-                    confirmationModal.classList.remove('hidden');
+                // Coletar dados do formulário
+                const formData = new FormData(form);
+                const name = formData.get('name');
+                const attendance = formData.get('attendance');
+                const hasCompanions = formData.get('hasCompanions');
+                
+                // Coletar acompanhantes
+                const companionNames = formData.getAll('companionName[]').filter(name => name.trim() !== '');
+                
+                // Criar objeto participante
+                const participant = {
+                    id: Date.now(), // ID único baseado em timestamp
+                    name: name,
+                    attendance: attendance,
+                    companions: hasCompanions === 'yes' ? companionNames : [],
+                    date: new Date().toISOString()
+                };
+                
+                // Salvar no localStorage
+                try {
+                    const existingParticipants = JSON.parse(localStorage.getItem('familyDayParticipants') || '[]');
+                    existingParticipants.push(participant);
+                    localStorage.setItem('familyDayParticipants', JSON.stringify(existingParticipants));
+                    
+                    // Mostrar modal de confirmação
                     setTimeout(() => {
-                        confirmationModal.classList.add('show');
-                    }, 10);
-                }, 800);
+                        confirmationModal.classList.remove('hidden');
+                        setTimeout(() => {
+                            confirmationModal.classList.add('show');
+                        }, 10);
+                    }, 800);
+                } catch (error) {
+                    console.error('Erro ao salvar participante:', error);
+                    alert('Erro ao salvar confirmação. Por favor, tente novamente.');
+                }
             });
 
             // Novo formulário do modal - usando event delegation

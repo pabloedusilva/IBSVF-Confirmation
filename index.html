@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBSVF - Confirmação para o Sítio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-light: #6b8cbe;
+            --secondary: #f8f9fa;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --success: #28a745;
+            --danger: #dc3545;
+            --white: #ffffff;
+            --whatsapp: #25D366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .logo-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-container {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            animation: slideUp 0.6s ease-in-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .radio-option input {
+            cursor: pointer;
+        }
+
+        .companions-section {
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+        }
+
+        .companion-list {
+            margin-top: 1rem;
+        }
+
+        .companion-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+            padding: 0.8rem;
+            background-color: var(--secondary);
+            border-radius: 5px;
+        }
+
+        .companion-item input {
+            flex: 1;
+        }
+
+        .remove-companion {
+            color: var(--danger);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .add-companion-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .add-companion-btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--whatsapp);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .developer {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .developer:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Acessibilidade */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Confirmação */
+        .confirmation {
+            text-align: center;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .confirmation-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .confirmation p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <!-- Substitua o src pela URL da sua logo -->
+                <img src="https://exemplo.com/logo-ibsvf.png" alt="Logo IBSVF" class="logo">
+            </div>
+            <h1>IBSVF - Confirmação para o Sítio</h1>
+            <p class="subtitle">Preencha o formulário para confirmar sua participação no nosso evento</p>
+        </header>
+
+        <div class="form-container" id="mainForm">
+            <form id="sitioForm">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefone para Contato</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="(00) 00000-0000">
+                </div>
+
+                <div class="form-group">
+                    <label>Você vai comparecer ao sítio?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="attendance" value="yes" checked>
+                            Sim, eu vou
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="attendance" value="no">
+                            Não, não vou
+                        </label>
+                    </div>
+                </div>
+
+                <div class="companions-section hidden" id="companionsSection">
+                    <label>Deseja levar acompanhantes?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="hasCompanions" value="yes">
+                            Sim
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="hasCompanions" value="no" checked>
+                            Não
+                        </label>
+                    </div>
+
+                    <div class="companion-list hidden" id="companionList">
+                        <div class="companion-item">
+                            <input type="text" name="companionName[]" placeholder="Nome do acompanhante">
+                            <button type="button" class="remove-companion" aria-label="Remover acompanhante">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-companion-btn hidden" id="addCompanionBtn">
+                        <i class="fas fa-plus"></i> Adicionar Acompanhante
+                    </button>
+                </div>
+
+                <button type="submit" class="submit-btn">Confirmar Presença</button>
+            </form>
+
+            <div class="contact-info">
+                <p>Para mais informações entre em contato:</p>
+                <a href="https://wa.me/5531985079718" class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> (31) 98507-9718
+                </a>
+            </div>
+        </div>
+
+        <div class="confirmation hidden" id="confirmationSection">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Confirmação Recebida!</h2>
+            <p>Obrigado por confirmar sua participação no nosso evento.</p>
+            <p>Estamos ansiosos para compartilhar momentos abençoados juntos!</p>
+            <button type="button" class="submit-btn" id="newFormBtn">Preencher Novo Formulário</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Desenvolvido por <a href="https://github.com/pablo" class="developer" target="_blank" rel="noopener noreferrer">Pablo</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('sitioForm');
+            const companionList = document.getElementById('companionList');
+            const addCompanionBtn = document.getElementById('addCompanionBtn');
+            const attendanceRadios = document.querySelectorAll('input[name="attendance"]');
+            const companionsSection = document.getElementById('companionsSection');
+            const hasCompanionsRadios = document.querySelectorAll('input[name="hasCompanions"]');
+            const mainForm = document.getElementById('mainForm');
+            const confirmationSection = document.getElementById('confirmationSection');
+            const newFormBtn = document.getElementById('newFormBtn');
+
+            // Mostrar/ocultar seção de acompanhantes
+            attendanceRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'yes') {
+                        companionsSection.classList.remove('hidden');
+                    } else {
+                        companionsSection.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Mostrar/ocultar lista de acompanhantes
+            hasCompanionsRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'yes') {
+                        companionList.classList.remove('hidden');
+                        addCompanionBtn.classList.remove('hidden');
+                    } else {
+                        companionList.classList.add('hidden');
+                        addCompanionBtn.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Adicionar acompanhante
+            addCompanionBtn.addEventListener('click', addCompanion);
+            
+            // Enviar formulário
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simular envio (em uma aplicação real, você enviaria para um servidor)
+                setTimeout(() => {
+                    mainForm.classList.add('hidden');
+                    confirmationSection.classList.remove('hidden');
+                    
+                    // Rolagem suave para a confirmação
+                    confirmationSection.scrollIntoView({ behavior: 'smooth' });
+                }, 800);
+            });
+
+            // Novo formulário
+            newFormBtn.addEventListener('click', function() {
+                form.reset();
+                companionList.innerHTML = `
+                    <div class="companion-item">
+                        <input type="text" name="companionName[]" placeholder="Nome do acompanhante">
+                        <button type="button" class="remove-companion" aria-label="Remover acompanhante">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Reatribuir eventos aos botões de remover
+                document.querySelectorAll('.remove-companion').forEach(btn => {
+                    btn.addEventListener('click', removeCompanion);
+                });
+                
+                // Resetar estados
+                companionsSection.classList.add('hidden');
+                companionList.classList.add('hidden');
+                addCompanionBtn.classList.add('hidden');
+                document.querySelector('input[name="attendance"][value="yes"]').checked = true;
+                document.querySelector('input[name="hasCompanions"][value="no"]').checked = true;
+                
+                confirmationSection.classList.add('hidden');
+                mainForm.classList.remove('hidden');
+                
+                // Voltar ao topo
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Função para adicionar acompanhante
+            function addCompanion() {
+                const companionItem = document.createElement('div');
+                companionItem.className = 'companion-item';
+                companionItem.innerHTML = `
+                    <input type="text" name="companionName[]" placeholder="Nome do acompanhante">
+                    <button type="button" class="remove-companion" aria-label="Remover acompanhante">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                companionList.appendChild(companionItem);
+                
+                // Adicionar evento ao botão de remover
+                companionItem.querySelector('.remove-companion').addEventListener('click', removeCompanion);
+            }
+
+            // Função para remover acompanhante
+            function removeCompanion() {
+                if (companionList.children.length > 1) {
+                    this.parentElement.remove();
+                }
+            }
+
+            // Inicializar eventos dos botões de remover
+            document.querySelectorAll('.remove-companion').forEach(btn => {
+                btn.addEventListener('click', removeCompanion);
+            });
+
+            // Máscara para telefone
+            const phoneInput = document.getElementById('phone');
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.substring(0, 11);
+                
+                if (value.length > 0) {
+                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                    if (value.length > 10) {
+                        value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                    } else {
+                        value = value.replace(/(\d)(\d{3})$/, '$1-$2');
+                    }
+                }
+                
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>

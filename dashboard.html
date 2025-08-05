@@ -420,10 +420,15 @@
             border-radius: var(--radius);
             z-index: 1;
             padding: 0.5rem 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
         }
 
-        .filter-dropdown:hover .filter-dropdown-content {
+        .filter-dropdown.open .filter-dropdown-content {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .filter-option {
@@ -432,10 +437,16 @@
             color: var(--text);
             text-decoration: none;
             transition: background-color 0.2s ease;
+            cursor: pointer;
         }
 
         .filter-option:hover {
             background-color: var(--gray);
+        }
+
+        .filter-option.active {
+            background-color: var(--primary);
+            color: var(--white);
         }
 
         .filter-option.active {
@@ -664,6 +675,12 @@
                 align-items: stretch;
             }
             
+            .filter-btn,
+            .export-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
             .search-input {
                 width: 100%;
             }
@@ -699,6 +716,13 @@
             
             .page-title {
                 font-size: 1.25rem;
+            }
+
+            .filter-dropdown-content {
+                right: 0;
+                left: 0;
+                min-width: auto;
+                width: 100%;
             }
 
             .stats-grid {
@@ -1004,6 +1028,8 @@
             const participantsTableBody = document.getElementById('participantsTableBody');
             const searchInput = document.getElementById('searchInput');
             const filterOptions = document.querySelectorAll('.filter-option');
+            const filterDropdown = document.querySelector('.filter-dropdown');
+            const filterBtn = document.querySelector('.filter-btn');
             const emptyState = document.getElementById('emptyState');
             
             // Elementos de dropdown do usuário
@@ -1034,6 +1060,22 @@
                     alert('Logout realizado com sucesso!');
                     window.location.href = 'index.html'; // Redirecionar para a página de login
                 }
+            });
+            
+            // Funcionalidade do dropdown do filtro
+            filterBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                filterDropdown.classList.toggle('open');
+            });
+            
+            // Fechar dropdown do filtro ao clicar fora
+            document.addEventListener('click', function() {
+                filterDropdown.classList.remove('open');
+            });
+            
+            // Prevenir fechamento ao clicar dentro do dropdown do filtro
+            filterDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
             
             // Elementos de estatísticas
@@ -1084,6 +1126,9 @@
                     this.classList.add('active');
                     currentFilter = this.dataset.filter;
                     renderParticipants();
+                    
+                    // Fechar o dropdown após selecionar uma opção
+                    filterDropdown.classList.remove('open');
                 });
             });
             

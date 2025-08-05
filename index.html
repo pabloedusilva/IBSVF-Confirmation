@@ -372,6 +372,105 @@
             display: none;
         }
 
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(128, 128, 128, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirmation-modal {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7) translateY(50px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(74, 111, 165, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-overlay.show .confirmation-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .confirmation-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+
+        .confirmation-modal .confirmation-icon {
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-modal .confirmation-icon i {
+            font-size: 4rem;
+            color: var(--success);
+            animation: bounceIn 0.6s ease-in-out;
+        }
+
+        .confirmation-modal h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .confirmation-modal p {
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        .confirmation-modal .submit-btn {
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -485,11 +584,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Telefone para Contato</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="(00) 00000-0000">
-                </div>
-
-                <div class="form-group">
                     <label>Você vai comparecer ao sítio?</label>
                     <div class="radio-group">
                         <label class="radio-option">
@@ -540,14 +634,17 @@
             </div>
         </div>
 
-        <div class="confirmation hidden" id="confirmationSection">
-            <div class="confirmation-icon">
-                <i class="fas fa-check-circle"></i>
+        <!-- Modal de Confirmação -->
+        <div class="modal-overlay hidden" id="confirmationModal">
+            <div class="confirmation-modal">
+                <div class="confirmation-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Confirmação Recebida!</h2>
+                <p>Obrigado por confirmar sua participação no nosso evento.</p>
+                <p>Estamos ansiosos para compartilhar momentos abençoados juntos!</p>
+                <button type="button" class="submit-btn" id="newFormBtnModal">Concluído</button>
             </div>
-            <h2>Confirmação Recebida!</h2>
-            <p>Obrigado por confirmar sua participação no nosso evento.</p>
-            <p>Estamos ansiosos para compartilhar momentos abençoados juntos!</p>
-            <button type="button" class="submit-btn" id="newFormBtn">Preencher Novo Formulário</button>
         </div>
     </div>
 
@@ -564,8 +661,11 @@
             const companionsSection = document.getElementById('companionsSection');
             const hasCompanionsRadios = document.querySelectorAll('input[name="hasCompanions"]');
             const mainForm = document.getElementById('mainForm');
-            const confirmationSection = document.getElementById('confirmationSection');
-            const newFormBtn = document.getElementById('newFormBtn');
+            const confirmationModal = document.getElementById('confirmationModal');
+            const newFormBtnModal = document.getElementById('newFormBtnModal');
+
+            // Debug: verificar se o elemento foi encontrado
+            console.log('newFormBtnModal:', newFormBtnModal);
 
             // Mostrar/ocultar seção de acompanhantes
             attendanceRadios.forEach(radio => {
@@ -600,43 +700,49 @@
                 
                 // Simular envio (em uma aplicação real, você enviaria para um servidor)
                 setTimeout(() => {
-                    mainForm.classList.add('hidden');
-                    confirmationSection.classList.remove('hidden');
-                    
-                    // Rolagem suave para a confirmação
-                    confirmationSection.scrollIntoView({ behavior: 'smooth' });
+                    // Mostrar modal ao invés da seção
+                    confirmationModal.classList.remove('hidden');
+                    setTimeout(() => {
+                        confirmationModal.classList.add('show');
+                    }, 10);
                 }, 800);
             });
 
-            // Novo formulário
-            newFormBtn.addEventListener('click', function() {
-                form.reset();
-                companionList.innerHTML = `
-                    <div class="companion-item">
-                        <input type="text" name="companionName[]" placeholder="Nome do acompanhante">
-                        <button type="button" class="remove-companion" aria-label="Remover acompanhante">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                
-                // Reatribuir eventos aos botões de remover
-                document.querySelectorAll('.remove-companion').forEach(btn => {
-                    btn.addEventListener('click', removeCompanion);
-                });
-                
-                // Resetar estados
-                companionsSection.classList.add('hidden');
-                companionList.classList.add('hidden');
-                addCompanionBtn.classList.add('hidden');
-                document.querySelector('input[name="attendance"][value="yes"]').checked = true;
-                document.querySelector('input[name="hasCompanions"][value="no"]').checked = true;
-                
-                confirmationSection.classList.add('hidden');
-                mainForm.classList.remove('hidden');
-                
-                // Voltar ao topo
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Novo formulário do modal - usando event delegation
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'newFormBtnModal') {
+                    console.log('Botão Concluído clicado via delegation!'); // Debug
+                    
+                    // Fechar modal
+                    confirmationModal.classList.remove('show');
+                    setTimeout(() => {
+                        confirmationModal.classList.add('hidden');
+                    }, 300);
+                    
+                    // Resetar formulário
+                    form.reset();
+                    companionList.innerHTML = `
+                        <div class="companion-item">
+                            <input type="text" name="companionName[]" placeholder="Nome do acompanhante">
+                            <button type="button" class="remove-companion" aria-label="Remover acompanhante">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Reatribuir eventos aos botões de remover
+                    document.querySelectorAll('.remove-companion').forEach(btn => {
+                        btn.addEventListener('click', removeCompanion);
+                    });
+                    
+                    // Resetar estados
+                    companionsSection.classList.add('hidden');
+                    companionList.classList.add('hidden');
+                    addCompanionBtn.classList.add('hidden');
+                    
+                    // Voltar ao topo
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             });
 
             // Função para adicionar acompanhante

@@ -78,20 +78,33 @@
 
         .event-info {
             background-color: var(--white);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(74, 111, 165, 0.1);
             animation: slideUp 0.6s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
         }
 
         .event-info h2 {
             font-size: 1.1rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
             text-align: center;
             color: var(--primary);
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .event-details {
@@ -104,32 +117,45 @@
 
         .event-detail-item {
             text-align: center;
-            padding: 0.6rem;
+            padding: 0.8rem 0.6rem;
             flex: 1;
             min-width: 120px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .event-detail-item:hover {
-            transform: none;
+            background-color: rgba(74, 111, 165, 0.05);
+            transform: translateY(-2px);
         }
 
         .event-detail-item i {
-            font-size: 1.1rem;
-            margin-bottom: 0.4rem;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
             color: var(--primary);
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .event-detail-item:hover i {
+            transform: scale(1.1);
         }
 
         .event-detail-item h3 {
             font-size: 0.85rem;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
             color: var(--text);
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .event-detail-item p {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-light);
-            line-height: 1.2;
+            line-height: 1.3;
+            font-weight: 500;
         }
 
         /* Seta animada */
@@ -467,7 +493,7 @@
                     <label>Você vai comparecer ao sítio?</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="attendance" value="yes" checked>
+                            <input type="radio" name="attendance" value="yes">
                             Sim, eu vou
                         </label>
                         <label class="radio-option">
@@ -485,7 +511,7 @@
                             Sim
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="hasCompanions" value="no" checked>
+                            <input type="radio" name="hasCompanions" value="no">
                             Não
                         </label>
                     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IBSVF - Confirmação para o Sítio</title>
+    <title>IBSVF Forms</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -772,24 +772,6 @@
             // Inicializar eventos dos botões de remover
             document.querySelectorAll('.remove-companion').forEach(btn => {
                 btn.addEventListener('click', removeCompanion);
-            });
-
-            // Máscara para telefone
-            const phoneInput = document.getElementById('phone');
-            phoneInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 11) value = value.substring(0, 11);
-                
-                if (value.length > 0) {
-                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-                    if (value.length > 10) {
-                        value = value.replace(/(\d)(\d{4})$/, '$1-$2');
-                    } else {
-                        value = value.replace(/(\d)(\d{3})$/, '$1-$2');
-                    }
-                }
-                
-                e.target.value = value;
             });
         });
     </script>

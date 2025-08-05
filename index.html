@@ -50,7 +50,18 @@
 
         .logo {
             height: 120px;
+            width: 120px;
             margin: 0 auto;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(74, 111, 165, 0.3);
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(74, 111, 165, 0.4);
         }
 
         h1 {
@@ -63,6 +74,93 @@
             color: var(--text-light);
             font-size: 1.1rem;
             margin-bottom: 1.5rem;
+        }
+
+        .event-info {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            animation: slideUp 0.6s ease-in-out;
+        }
+
+        .event-info h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            text-align: center;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .event-details {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .event-detail-item {
+            text-align: center;
+            padding: 0.6rem;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .event-detail-item:hover {
+            transform: none;
+        }
+
+        .event-detail-item i {
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+            color: var(--primary);
+        }
+
+        .event-detail-item h3 {
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .event-detail-item p {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            line-height: 1.2;
+        }
+
+        /* Seta animada */
+        .scroll-arrow {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .arrow-down {
+            font-size: 1.8rem;
+            color: var(--primary);
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            transition: color 0.3s ease;
+        }
+
+        .arrow-down:hover {
+            color: var(--primary-light);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
         }
 
         .form-container {
@@ -322,11 +420,36 @@
         <header>
             <div class="logo-container">
                 <!-- Substitua o src pela URL da sua logo -->
-                <img src="https://exemplo.com/logo-ibsvf.png" alt="Logo IBSVF" class="logo">
+                <img src="img/logo.png" alt="Logo IBSVF" class="logo">
             </div>
-            <h1>IBSVF - Confirmação para o Sítio</h1>
-            <p class="subtitle">Preencha o formulário para confirmar sua participação no nosso evento</p>
+            <h1>Family Day</h1>
         </header>
+
+        <div class="event-info">
+            <h2>Informações do Evento</h2>
+            <div class="event-details">
+                <div class="event-detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Local</h3>
+                    <p>Sítio Shalom</p>
+                </div>
+                <div class="event-detail-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>Horário</h3>
+                    <p>Das 07h às 15h</p>
+                </div>
+                <div class="event-detail-item">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Importante</h3>
+                    <p>Cada família deve levar sua carne e bebida</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seta animada -->
+        <div class="scroll-arrow">
+            <i class="fas fa-chevron-down arrow-down" onclick="document.querySelector('.form-container').scrollIntoView({behavior: 'smooth'})"></i>
+        </div>
 
         <div class="form-container" id="mainForm">
             <form id="sitioForm">

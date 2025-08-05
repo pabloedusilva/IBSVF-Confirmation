@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - IBSVF Family Day</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-light: #6b8cbe;
+            --primary-dark: #3a5a8a;
+            --secondary: #f8f9fa;
+            --success: #28a745;
+            --success-light: #d4edda;
+            --danger: #dc3545;
+            --danger-light: #f8d7da;
+            --warning: #ffc107;
+            --warning-light: #fff3cd;
+            --info: #17a2b8;
+            --info-light: #d1ecf1;
+            --text: #333;
+            --text-light: #666;
+            --text-lighter: #999;
+            --border: #e0e0e0;
+            --white: #ffffff;
+            --gray: #f5f5f5;
+            --gray-dark: #e9ecef;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .user-toggle:hover {
+            background-color: var(--gray);
+        }
+
+        .user-toggle i {
+            transition: transform 0.2s ease;
+        }
+
+        .user-dropdown.open .user-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--white);
+            min-width: 150px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: var(--radius);
+            z-index: 1000;
+            padding: 0.5rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+        }
+
+        .user-dropdown.open .user-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .user-dropdown-item:hover {
+            background-color: var(--gray);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .stat-card.primary::before {
+            background-color: var(--primary);
+        }
+
+        .stat-card.success::before {
+            background-color: var(--success);
+        }
+
+        .stat-card.danger::before {
+            background-color: var(--danger);
+        }
+
+        .stat-card.warning::before {
+            background-color: var(--warning);
+        }
+
+        .stat-card.info::before {
+            background-color: var(--info);
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            opacity: 0.2;
+        }
+
+        /* Participants Table */
+        .table-card {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem 0.5rem 2rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            width: 200px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            width: 250px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .export-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .export-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: var(--gray);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--gray);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.confirmed {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .status-badge.not-confirmed {
+            background-color: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--danger);
+        }
+
+        /* Filter Dropdown */
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--white);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: var(--radius);
+            z-index: 1;
+            padding: 0.5rem 0;
+        }
+
+        .filter-dropdown:hover .filter-dropdown-content {
+            display: block;
+        }
+
+        .filter-option {
+            padding: 0.5rem 1rem;
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .filter-option:hover {
+            background-color: var(--gray);
+        }
+
+        .filter-option.active {
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            color: var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (min-width: 1400px) {
+            .main-content {
+                max-width: 1600px;
+                padding: 3rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .table-actions {
+                width: 100%;
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .search-input:focus {
+                width: 100%;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            table {
+                min-width: 600px;
+            }
+            
+            .modal {
+                width: 95%;
+                margin: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 0.75rem;
+            }
+            
+            .header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .table-card,
+            .chart-card {
+                padding: 1rem;
+            }
+            
+            .table-title {
+                font-size: 1rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+            
+            .status-badge {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+            }
+            
+            .action-btn {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                gap: 0.5rem;
+            }
+            
+            .stat-card {
+                padding: 0.75rem;
+            }
+            
+            .stat-title {
+                font-size: 0.8rem;
+            }
+            
+            .stat-value {
+                font-size: 1.25rem;
+            }
+            
+            .table-card {
+                padding: 0.75rem;
+            }
+            
+            table {
+                min-width: 500px;
+            }
+            
+            th, td {
+                padding: 0.4rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .header-left {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div class="header-left">
+                    <h1 class="page-title">Painel</h1>
+                </div>
+                <div class="user-menu">
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-toggle" id="userToggle">
+                            <span>Admin</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu">
+                            <button class="user-dropdown-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sair</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-title">
+                        <i class="fas fa-user-check"></i>
+                        <span>Confirmados</span>
+                    </div>
+                    <div class="stat-value" id="confirmed-count">0</div>
+                    <i class="fas fa-user-check stat-icon"></i>
+                </div>
+
+                <div class="stat-card danger">
+                    <div class="stat-title">
+                        <i class="fas fa-user-times"></i>
+                        <span>Não Confirmados</span>
+                    </div>
+                    <div class="stat-value" id="not-confirmed-count">0</div>
+                    <i class="fas fa-user-times stat-icon"></i>
+                </div>
+
+                <div class="stat-card success">
+                    <div class="stat-title">
+                        <i class="fas fa-users"></i>
+                        <span>Total de Pessoas</span>
+                    </div>
+                    <div class="stat-value" id="total-people">0</div>
+                    <i class="fas fa-users stat-icon"></i>
+                </div>
+
+                <div class="stat-card warning">
+                    <div class="stat-title">
+                        <i class="fas fa-home"></i>
+                        <span>Famílias</span>
+                    </div>
+                    <div class="stat-value" id="families-count">0</div>
+                    <i class="fas fa-home stat-icon"></i>
+                </div>
+            </div>
+
+            <!-- Participants Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">Lista de Participantes</h3>
+                    <div class="table-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" placeholder="Buscar participante..." id="searchInput">
+                        </div>
+                        
+                        <div class="filter-dropdown">
+                            <button class="filter-btn">
+                                <i class="fas fa-filter"></i>
+                                <span>Filtrar</span>
+                            </button>
+                            <div class="filter-dropdown-content">
+                                <a href="#" class="filter-option active" data-filter="all">Todos</a>
+                                <a href="#" class="filter-option" data-filter="confirmed">Confirmados</a>
+                                <a href="#" class="filter-option" data-filter="not-confirmed">Não Confirmados</a>
+                                <a href="#" class="filter-option" data-filter="with-companions">Com Acompanhantes</a>
+                                <a href="#" class="filter-option" data-filter="without-companions">Sem Acompanhantes</a>
+                            </div>
+                        </div>
+                        
+                        <button class="export-btn">
+                            <i class="fas fa-download"></i>
+                            <span>Exportar</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table id="participantsTable">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Status</th>
+                                <th>Acompanhantes</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="participantsTableBody">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                    <h4 class="empty-state-title">Nenhum participante encontrado</h4>
+                    <p>Não há participantes correspondentes aos filtros aplicados.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Participant Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Participante</h3>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label for="editName" class="form-label">Nome Completo</label>
+                        <input type="text" id="editName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="editAttendance" value="yes" checked>
+                                Confirmado
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="editAttendance" value="no">
+                                Não Confirmado
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Acompanhantes</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="editHasCompanions" value="yes">
+                                Sim
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="editHasCompanions" value="no" checked>
+                                Não
+                            </label>
+                        </div>
+                        <div id="companionsContainer" style="margin-top: 1rem; display: none;">
+                            <div id="companionsList"></div>
+                            <button type="button" class="btn btn-outline" id="addCompanionBtn" style="margin-top: 0.5rem;">
+                                <i class="fas fa-plus"></i> Adicionar Acompanhante
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelEdit">Cancelar</button>
+                <button class="btn btn-primary" id="saveEdit">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Exclusão</h3>
+                <button class="modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir este participante? Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelDelete">Cancelar</button>
+                <button class="btn btn-primary" id="confirmDelete" style="background-color: var(--danger);">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa o banco de dados
+            const dbPromise = initDB();
+            
+            // Elementos do DOM
+            const participantsTableBody = document.getElementById('participantsTableBody');
+            const searchInput = document.getElementById('searchInput');
+            const filterOptions = document.querySelectorAll('.filter-option');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Elementos de dropdown do usuário
+            const userDropdown = document.getElementById('userDropdown');
+            const userToggle = document.getElementById('userToggle');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            // Funcionalidade do dropdown do usuário
+            userToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('open');
+            });
+            
+            // Fechar dropdown ao clicar fora
+            document.addEventListener('click', function() {
+                userDropdown.classList.remove('open');
+            });
+            
+            // Prevenir fechamento ao clicar dentro do dropdown
+            userDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Funcionalidade do logout
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    // Aqui você pode adicionar a lógica de logout
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = 'index.html'; // Redirecionar para a página de login
+                }
+            });
+            
+            // Elementos de estatísticas
+            const confirmedCountEl = document.getElementById('confirmed-count');
+            const notConfirmedCountEl = document.getElementById('not-confirmed-count');
+            const totalPeopleEl = document.getElementById('total-people');
+            const familiesCountEl = document.getElementById('families-count');
+            
+            // Modais
+            const editModal = document.getElementById('editModal');
+            const closeEditModal = document.getElementById('closeEditModal');
+            const cancelEdit = document.getElementById('cancelEdit');
+            const saveEdit = document.getElementById('saveEdit');
+            const deleteModal = document.getElementById('deleteModal');
+            const closeDeleteModal = document.getElementById('closeDeleteModal');
+            const cancelDelete = document.getElementById('cancelDelete');
+            const confirmDelete = document.getElementById('confirmDelete');
+            
+            // Formulário de edição
+            const editForm = document.getElementById('editForm');
+            const editIdInput = document.getElementById('editId');
+            const editNameInput = document.getElementById('editName');
+            const editAttendanceRadios = document.querySelectorAll('input[name="editAttendance"]');
+            const editHasCompanionsRadios = document.querySelectorAll('input[name="editHasCompanions"]');
+            const companionsContainer = document.getElementById('companionsContainer');
+            const companionsList = document.getElementById('companionsList');
+            const addCompanionBtn = document.getElementById('addCompanionBtn');
+            
+            // Variáveis de estado
+            let currentFilter = 'all';
+            let currentSearch = '';
+            let currentParticipantId = null;
+            let participants = [];
+            
+            // Carrega os dados iniciais
+            loadParticipants();
+            
+            // Event Listeners
+            searchInput.addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase();
+                renderParticipants();
+            });
+            
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    filterOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderParticipants();
+                });
+            });
+            
+            // Modal de edição
+            function openEditModal(participant) {
+                currentParticipantId = participant.id;
+                editIdInput.value = participant.id;
+                editNameInput.value = participant.name;
+                
+                // Definir status de participação
+                document.querySelector(`input[name="editAttendance"][value="${participant.attendance}"]`).checked = true;
+                
+                // Definir acompanhantes
+                const hasCompanions = participant.companions && participant.companions.length > 0;
+                document.querySelector(`input[name="editHasCompanions"][value="${hasCompanions ? 'yes' : 'no'}"]`).checked = true;
+                
+                // Mostrar/ocultar seção de acompanhantes
+                companionsContainer.style.display = hasCompanions ? 'block' : 'none';
+                
+                // Preencher acompanhantes se houver
+                companionsList.innerHTML = '';
+                if (hasCompanions) {
+                    participant.companions.forEach((companion, index) => {
+                        addCompanionField(companion, index);
+                    });
+                }
+                
+                editModal.classList.add('show');
+            }
+            
+            // Adicionar campo de acompanhante
+            function addCompanionField(value = '', index) {
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.style.display = 'flex';
+                div.style.gap = '0.5rem';
+                div.style.alignItems = 'center';
+                
+                div.innerHTML = `
+                    <input type="text" class="form-control companion-input" value="${value}" data-index="${index}" placeholder="Nome do acompanhante">
+                    <button type="button" class="btn btn-outline remove-companion" style="padding: 0.5rem;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                companionsList.appendChild(div);
+                
+                // Adicionar evento ao botão de remover
+                div.querySelector('.remove-companion').addEventListener('click', function() {
+                    div.remove();
+                    // Se não houver mais acompanhantes, marcar "Não" como selecionado
+                    if (companionsList.children.length === 0) {
+                        document.querySelector('input[name="editHasCompanions"][value="no"]').checked = true;
+                        companionsContainer.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Evento para adicionar acompanhante
+            addCompanionBtn.addEventListener('click', function() {
+                addCompanionField('', companionsList.children.length);
+            });
+            
+            // Evento para alternar seção de acompanhantes
+            editHasCompanionsRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    companionsContainer.style.display = this.value === 'yes' ? 'block' : 'none';
+                    if (this.value === 'yes' && companionsList.children.length === 0) {
+                        addCompanionField('', 0);
+                    }
+                });
+            });
+            
+            // Fechar modal de edição
+            closeEditModal.addEventListener('click', closeModal);
+            cancelEdit.addEventListener('click', closeModal);
+            
+            function closeModal() {
+                editModal.classList.remove('show');
+                deleteModal.classList.remove('show');
+                setTimeout(() => {
+                    editModal.classList.add('hidden');
+                    deleteModal.classList.add('hidden');
+                }, 300);
+            }
+            
+            // Salvar edição
+            saveEdit.addEventListener('click', function() {
+                if (!editNameInput.value.trim()) {
+                    alert('Por favor, insira um nome válido.');
+                    return;
+                }
+                
+                const updatedParticipant = {
+                    id: currentParticipantId,
+                    name: editNameInput.value.trim(),
+                    attendance: document.querySelector('input[name="editAttendance"]:checked').value,
+                    companions: []
+                };
+                
+                // Coletar acompanhantes se houver
+                if (document.querySelector('input[name="editHasCompanions"]:checked').value === 'yes') {
+                    const companionInputs = companionsList.querySelectorAll('.companion-input');
+                    companionInputs.forEach(input => {
+                        if (input.value.trim()) {
+                            updatedParticipant.companions.push(input.value.trim());
+                        }
+                    });
+                }
+                
+                // Atualizar no banco de dados
+                dbPromise.then(db => {
+                    const transaction = db.transaction('participants', 'readwrite');
+                    const store = transaction.objectStore('participants');
+                    
+                    const request = store.put(updatedParticipant);
+                    
+                    request.onsuccess = function() {
+                        loadParticipants();
+                        closeModal();
+                    };
+                    
+                    request.onerror = function() {
+                        alert('Erro ao atualizar participante. Por favor, tente novamente.');
+                    };
+                });
+            });
+            
+            // Modal de exclusão
+            function openDeleteModal(id) {
+                currentParticipantId = id;
+                deleteModal.classList.add('show');
+            }
+            
+            closeDeleteModal.addEventListener('click', closeModal);
+            cancelDelete.addEventListener('click', closeModal);
+            
+            confirmDelete.addEventListener('click', function() {
+                dbPromise.then(db => {
+                    const transaction = db.transaction('participants', 'readwrite');
+                    const store = transaction.objectStore('participants');
+                    
+                    const request = store.delete(currentParticipantId);
+                    
+                    request.onsuccess = function() {
+                        loadParticipants();
+                        closeModal();
+                    };
+                    
+                    request.onerror = function() {
+                        alert('Erro ao excluir participante. Por favor, tente novamente.');
+                    };
+                });
+            });
+            
+            // Inicializar banco de dados IndexedDB
+            function initDB() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open('FamilyDayDB', 1);
+                    
+                    request.onupgradeneeded = function(event) {
+                        const db = event.target.result;
+                        
+                        // Criar object store para participantes
+                        const participantsStore = db.createObjectStore('participants', { keyPath: 'id', autoIncrement: true });
+                        
+                        // Criar índices para busca rápida
+                        participantsStore.createIndex('name', 'name', { unique: false });
+                        participantsStore.createIndex('attendance', 'attendance', { unique: false });
+                    };
+                    
+                    request.onsuccess = function(event) {
+                        resolve(event.target.result);
+                        
+                        // Adicionar dados de exemplo se o banco estiver vazio
+                        checkIfEmptyAndAddSampleData(event.target.result);
+                    };
+                    
+                    request.onerror = function(event) {
+                        console.error('Erro ao abrir o banco de dados:', event.target.error);
+                        reject(event.target.error);
+                    };
+                });
+            }
+            
+            // Verificar se o banco está vazio e adicionar dados de exemplo
+            function checkIfEmptyAndAddSampleData(db) {
+                const transaction = db.transaction('participants', 'readonly');
+                const store = transaction.objectStore('participants');
+                const countRequest = store.count();
+                
+                countRequest.onsuccess = function() {
+                    if (countRequest.result === 0) {
+                        addSampleData(db);
+                    }
+                };
+            }
+            
+            // Adicionar dados de exemplo
+            function addSampleData(db) {
+                const sampleData = [
+                    {
+                        name: 'João Silva',
+                        attendance: 'yes',
+                        companions: ['Maria Silva', 'Pedro Silva'],
+                        date: new Date('2023-06-15').toISOString()
+                    },
+                    {
+                        name: 'Ana Oliveira',
+                        attendance: 'yes',
+                        companions: ['Carlos Oliveira'],
+                        date: new Date('2023-06-14').toISOString()
+                    },
+                    {
+                        name: 'Marcos Souza',
+                        attendance: 'no',
+                        companions: [],
+                        date: new Date('2023-06-13').toISOString()
+                    },
+                    {
+                        name: 'Patrícia Lima',
+                        attendance: 'yes',
+                        companions: [],
+                        date: new Date('2023-06-16').toISOString()
+                    },
+                    {
+                        name: 'Ricardo Alves',
+                        attendance: 'yes',
+                        companions: ['Fernanda Alves', 'Lucas Alves', 'Sophia Alves'],
+                        date: new Date('2023-06-12').toISOString()
+                    },
+                    {
+                        name: 'Juliana Costa',
+                        attendance: 'no',
+                        companions: [],
+                        date: new Date('2023-06-11').toISOString()
+                    }
+                ];
+                
+                const transaction = db.transaction('participants', 'readwrite');
+                const store = transaction.objectStore('participants');
+                
+                sampleData.forEach(participant => {
+                    store.add(participant);
+                });
+                
+                transaction.oncomplete = function() {
+                    loadParticipants();
+                };
+            }
+            
+            // Carregar participantes do banco de dados
+            function loadParticipants() {
+                dbPromise.then(db => {
+                    const transaction = db.transaction('participants', 'readonly');
+                    const store = transaction.objectStore('participants');
+                    const request = store.getAll();
+                    
+                    request.onsuccess = function() {
+                        participants = request.result;
+                        updateStatistics(participants);
+                        renderParticipants();
+                    };
+                    
+                    request.onerror = function() {
+                        console.error('Erro ao carregar participantes:', request.error);
+                    };
+                });
+            }
+            
+            // Atualizar estatísticas
+            function updateStatistics(participants) {
+                const confirmed = participants.filter(p => p.attendance === 'yes').length;
+                const notConfirmed = participants.filter(p => p.attendance === 'no').length;
+                
+                let totalPeople = confirmed;
+                participants.forEach(p => {
+                    if (p.attendance === 'yes') {
+                        totalPeople += p.companions ? p.companions.length : 0;
+                    }
+                });
+                
+                confirmedCountEl.textContent = confirmed;
+                notConfirmedCountEl.textContent = notConfirmed;
+                totalPeopleEl.textContent = totalPeople;
+                familiesCountEl.textContent = participants.length;
+            }
+            
+            // Renderizar lista de participantes
+            function renderParticipants() {
+                let filteredParticipants = [...participants];
+                
+                // Aplicar filtro
+                if (currentFilter !== 'all') {
+                    filteredParticipants = filteredParticipants.filter(participant => {
+                        if (currentFilter === 'confirmed') return participant.attendance === 'yes';
+                        if (currentFilter === 'not-confirmed') return participant.attendance === 'no';
+                        if (currentFilter === 'with-companions') return participant.companions && participant.companions.length > 0;
+                        if (currentFilter === 'without-companions') return !participant.companions || participant.companions.length === 0;
+                        return true;
+                    });
+                }
+                
+                // Aplicar busca
+                if (currentSearch) {
+                    filteredParticipants = filteredParticipants.filter(participant => 
+                        participant.name.toLowerCase().includes(currentSearch) ||
+                        (participant.companions && participant.companions.some(c => c.toLowerCase().includes(currentSearch)))
+                    );
+                }
+                
+                // Ordenar por nome
+                filteredParticipants.sort((a, b) => a.name.localeCompare(b.name));
+                
+                // Renderizar tabela
+                participantsTableBody.innerHTML = '';
+                
+                if (filteredParticipants.length === 0) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                filteredParticipants.forEach(participant => {
+                    const row = document.createElement('tr');
+                    
+                    // Formatar data
+                    const date = participant.date ? new Date(participant.date) : new Date();
+                    const formattedDate = date.toLocaleDateString('pt-BR');
+                    
+                    row.innerHTML = `
+                        <td>${participant.name}</td>
+                        <td>
+                            <span class="status-badge ${participant.attendance === 'yes' ? 'confirmed' : 'not-confirmed'}">
+                                ${participant.attendance === 'yes' ? 'Confirmado' : 'Não Confirmado'}
+                            </span>
+                        </td>
+                        <td>${participant.companions && participant.companions.length > 0 ? participant.companions.join(', ') : 'Nenhum'}</td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button class="action-btn edit-btn" data-id="${participant.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete delete-btn" data-id="${participant.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    participantsTableBody.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões de ação
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        const participant = participants.find(p => p.id === id);
+                        if (participant) {
+                            openEditModal(participant);
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        openDeleteModal(id);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

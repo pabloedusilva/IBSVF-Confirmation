@@ -328,13 +328,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Deletar participante
     function deleteParticipant(id) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        
         fetch('/Dashboard/DeleteParticipant', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify({ id: id })
+            body: `id=${id}&__RequestVerificationToken=${encodeURIComponent(token)}`
         })
         .then(response => response.json())
         .then(data => {
@@ -363,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(requestData)
         })

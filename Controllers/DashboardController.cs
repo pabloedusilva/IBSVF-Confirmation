@@ -107,6 +107,7 @@ namespace IBSVF.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteParticipant(int id)
         {
             try

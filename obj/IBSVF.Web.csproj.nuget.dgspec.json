@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj": {}
+    "D:\\Ambiente2\\IBSVF-Confirm\\IBSVF.Web.csproj": {}
   },
   "projects": {
-    "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj": {
+    "D:\\Ambiente2\\IBSVF-Confirm\\IBSVF.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj",
+        "projectUniqueName": "D:\\Ambiente2\\IBSVF-Confirm\\IBSVF.Web.csproj",
         "projectName": "IBSVF.Web",
-        "projectPath": "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj",
+        "projectPath": "D:\\Ambiente2\\IBSVF-Confirm\\IBSVF.Web.csproj",
         "packagesPath": "C:\\Users\\Alunos\\.nuget\\packages\\",
-        "outputPath": "D:\\IBSVF-Confirmation\\obj\\",
+        "outputPath": "D:\\Ambiente2\\IBSVF-Confirm\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Alunos\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -45,7 +45,7 @@
     <div class="form-container" id="mainForm">
         <form id="sitioForm">
             @Html.AntiForgeryToken()
-            
+
             <div class="form-group">
                 <label for="name"><span class="required-asterisk">*</span> Nome Completo</label>
                 <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
@@ -96,9 +96,20 @@
 
         <div class="contact-info">
             <p>Para mais informações entre em contato:</p>
-            <a href="https://wa.me/5531985079718" class="whatsapp-btn" target="_blank">
-                <i class="fab fa-whatsapp"></i> (31) 98507-9718
-            </a>
+            <div class="whatsapp-contacts">
+                <div class="contact-person">
+                    <h4>Priscila</h4>
+                    <a href="https://wa.me/5531987426946" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> (31) 98742-6946
+                    </a>
+                </div>
+                <div class="contact-person">
+                    <h4>Nete</h4>
+                    <a href="https://wa.me/5531987403950" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> (31) 98740-3950
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -130,23 +141,8 @@
             <h2 style="font-size:1.2rem;color:#333;margin-bottom:0.7rem;font-weight:600;">
                 Preencha todos os campos obrigatórios
             </h2>
-            <button type="button" class="submit-btn" id="closeErrorModal" style="background:#dc3545;margin-top:0;">OK</button>
-        </div>
-    </div>
-
-    <!-- Modal de erro de confirmação -->
-    <div class="modal-overlay hidden" id="confirmationErrorModal">
-        <div class="confirmation-modal" style="max-width:340px;padding:2rem 1.2rem;">
-            <div style="margin-bottom:1rem;font-size:2.2rem;color:#dc3545;">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h2 style="font-size:1.2rem;color:#333;margin-bottom:0.7rem;font-weight:600;" id="confirmationErrorTitle">
-                Erro ao confirmar participação
-            </h2>
-            <p style="font-size:0.9rem;color:#666;margin-bottom:1.5rem;" id="confirmationErrorMessage">
-                Tente novamente.
-            </p>
-            <button type="button" class="submit-btn" id="closeConfirmationErrorModal" style="background:#dc3545;margin-top:0;">OK</button>
+            <button type="button" class="submit-btn" id="closeErrorModal"
+                style="background:#dc3545;margin-top:0;">OK</button>
         </div>
     </div>
 </div>

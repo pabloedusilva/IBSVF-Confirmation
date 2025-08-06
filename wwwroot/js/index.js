@@ -11,12 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const newFormBtnModal = document.getElementById('newFormBtnModal');
     const errorModal = document.getElementById('errorModal');
     const closeErrorModal = document.getElementById('closeErrorModal');
-    
-    // Elementos do modal de erro de confirmação
-    const confirmationErrorModal = document.getElementById('confirmationErrorModal');
-    const closeConfirmationErrorModal = document.getElementById('closeConfirmationErrorModal');
-    const confirmationErrorTitle = document.getElementById('confirmationErrorTitle');
-    const confirmationErrorMessage = document.getElementById('confirmationErrorMessage');
 
     // Mostrar/ocultar seção de acompanhantes
     attendanceRadios.forEach(radio => {
@@ -47,26 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Variável para prevenir múltiplos envios
     let isSubmitting = false;
-
-    // Funções para modais de erro
-    function showConfirmationError(title, message) {
-        confirmationErrorTitle.textContent = title;
-        confirmationErrorMessage.textContent = message;
-        confirmationErrorModal.classList.remove('hidden');
-        setTimeout(() => {
-            confirmationErrorModal.classList.add('show');
-        }, 10);
-    }
-
-    function closeConfirmationErrorModalFunction() {
-        confirmationErrorModal.classList.remove('show');
-        setTimeout(() => {
-            confirmationErrorModal.classList.add('hidden');
-        }, 300);
-    }
-
-    // Eventos do modal de erro de confirmação
-    closeConfirmationErrorModal.addEventListener('click', closeConfirmationErrorModalFunction);
 
     // Enviar formulário
     form.addEventListener('submit', function (e) {
@@ -127,13 +101,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, 10);
                 }, 800);
             } else {
-                showConfirmationError('Erro ao confirmar participação', data.message || 'Erro ao confirmar participação');
+                alert(data.message || 'Erro ao confirmar participação');
                 isSubmitting = false;
             }
         })
         .catch(error => {
             console.error('Erro:', error);
-            showConfirmationError('Erro ao confirmar participação', 'Erro ao confirmar participação. Tente novamente.');
+            alert('Erro ao confirmar participação. Tente novamente.');
             isSubmitting = false;
         });
     });

@@ -1,9 +1,5 @@
 # IBSVF Family Day - Sistema de Confirmação
 
-# DEMO LIVE
-- Dashboard: https://ibsvf-confirm-production.up.railway.app/dashboard
-- index: https://ibsvf-confirm-production.up.railway.app
-
 Sistema web desenvolvido em ASP.NET Core para gerenciamento de confirmações de presença no Family Day da IBSVF.
 
 ## 🚀 Tecnologias Utilizadas

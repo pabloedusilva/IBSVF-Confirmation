@@ -21,7 +21,7 @@
             <div class="user-menu">
                 <div class="user-dropdown" id="userDropdown">
                     <button class="user-toggle" id="userToggle">
-                        <span>Admin</span>
+                        <span>@(User?.Identity?.Name ?? "Admin")</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="user-dropdown-menu">
@@ -228,83 +228,6 @@
         <div class="modal-footer">
             <button class="btn btn-outline" id="cancelDelete">Cancelar</button>
             <button class="btn btn-primary" id="confirmDelete" style="background-color: var(--danger);">Excluir</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Sucesso -->
-<div class="modal-overlay" id="successModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-check-circle"></i>
-                Sucesso
-            </h3>
-            <button class="modal-close" id="closeSuccessModal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p id="successMessage">Operação realizada com sucesso!</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" id="okSuccess">OK</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Erro -->
-<div class="modal-overlay" id="dashboardErrorModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-exclamation-circle"></i>
-                Erro
-            </h3>
-            <button class="modal-close" id="closeDashboardErrorModal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p id="dashboardErrorMessage">Ocorreu um erro. Tente novamente.</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" id="okDashboardError">OK</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Validação -->
-<div class="modal-overlay" id="validationModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-exclamation-triangle"></i>
-                Atenção
-            </h3>
-            <button class="modal-close" id="closeValidationModal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p id="validationMessage">Por favor, verifique os dados informados.</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" id="okValidation">OK</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Logout -->
-<div class="modal-overlay" id="logoutModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-sign-out-alt"></i>
-                Confirmar Logout
-            </h3>
-            <button class="modal-close" id="closeLogoutModal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p>Tem certeza que deseja sair?</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" id="cancelLogout">Cancelar</button>
-            <button class="btn btn-primary" id="confirmLogout" style="background-color: var(--danger);">Sair</button>
         </div>
     </div>
 </div>

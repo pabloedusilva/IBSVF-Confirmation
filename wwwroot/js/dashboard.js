@@ -31,25 +31,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funcionalidade do logout
     logoutBtn.addEventListener('click', function () {
-        if (confirm('Tem certeza que deseja sair?')) {
-            fetch('/Auth/Logout', {
-                method: 'POST',
-                headers: {
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/Auth/Login';
-                } else {
-                    alert('Erro ao fazer logout');
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
+        logoutModal.classList.add('show');
+    });
+
+    // Confirmar logout
+    confirmLogout.addEventListener('click', function () {
+        fetch('/Auth/Logout', {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            }
+        })
+        .then(response => {
+            if (response.ok) {
                 window.location.href = '/Auth/Login';
-            });
-        }
+            } else {
+                showError('Erro ao fazer logout');
+                closeAllModals();
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            window.location.href = '/Auth/Login';
+        });
     });
 
     // Funcionalidade do dropdown do filtro
@@ -83,6 +87,77 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeDeleteModal = document.getElementById('closeDeleteModal');
     const cancelDelete = document.getElementById('cancelDelete');
     const confirmDelete = document.getElementById('confirmDelete');
+    
+    // Novos modais
+    const successModal = document.getElementById('successModal');
+    const closeSuccessModal = document.getElementById('closeSuccessModal');
+    const okSuccess = document.getElementById('okSuccess');
+    const successMessage = document.getElementById('successMessage');
+    
+    const dashboardErrorModal = document.getElementById('dashboardErrorModal');
+    const closeDashboardErrorModal = document.getElementById('closeDashboardErrorModal');
+    const okDashboardError = document.getElementById('okDashboardError');
+    const dashboardErrorMessage = document.getElementById('dashboardErrorMessage');
+    
+    const validationModal = document.getElementById('validationModal');
+    const closeValidationModal = document.getElementById('closeValidationModal');
+    const okValidation = document.getElementById('okValidation');
+    const validationMessage = document.getElementById('validationMessage');
+
+    // Modal de logout
+    const logoutModal = document.getElementById('logoutModal');
+    const closeLogoutModal = document.getElementById('closeLogoutModal');
+    const cancelLogout = document.getElementById('cancelLogout');
+    const confirmLogout = document.getElementById('confirmLogout');
+
+    // Funções para mostrar modais
+    function showSuccess(message) {
+        successMessage.textContent = message;
+        successModal.classList.add('show');
+    }
+
+    function showError(message) {
+        dashboardErrorMessage.textContent = message;
+        dashboardErrorModal.classList.add('show');
+    }
+
+    function showValidation(message) {
+        validationMessage.textContent = message;
+        validationModal.classList.add('show');
+    }
+
+    function closeAllModals() {
+        successModal.classList.remove('show');
+        dashboardErrorModal.classList.remove('show');
+        validationModal.classList.remove('show');
+        logoutModal.classList.remove('show');
+    }
+
+    // Eventos dos novos modais
+    closeSuccessModal.addEventListener('click', closeAllModals);
+    okSuccess.addEventListener('click', closeAllModals);
+    closeDashboardErrorModal.addEventListener('click', closeAllModals);
+    okDashboardError.addEventListener('click', closeAllModals);
+    closeValidationModal.addEventListener('click', closeAllModals);
+    okValidation.addEventListener('click', closeAllModals);
+
+    // Event listeners do modal de logout
+    closeLogoutModal.addEventListener('click', closeAllModals);
+    cancelLogout.addEventListener('click', closeAllModals);
+
+    // Fechar modais ao clicar fora
+    successModal.addEventListener('click', function (e) {
+        if (e.target === this) closeAllModals();
+    });
+    dashboardErrorModal.addEventListener('click', function (e) {
+        if (e.target === this) closeAllModals();
+    });
+    validationModal.addEventListener('click', function (e) {
+        if (e.target === this) closeAllModals();
+    });
+    logoutModal.addEventListener('click', function (e) {
+        if (e.target === this) closeAllModals();
+    });
 
     // Formulário de edição
     const editForm = document.getElementById('editForm');
@@ -212,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Salvar edição
     saveEdit.addEventListener('click', function () {
         if (!editNameInput.value.trim()) {
-            alert('Por favor, insira um nome válido.');
+            showValidation('Por favor, insira um nome válido.');
             return;
         }
 
@@ -313,12 +388,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 loadParticipants(); // Recarregar a lista
             } else {
-                alert(data.message || 'Erro ao excluir participante');
+                showError(data.message || 'Erro ao excluir participante');
             }
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao excluir participante');
+            showError('Erro ao excluir participante');
         });
     }
 
@@ -344,12 +419,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 loadParticipants(); // Recarregar a lista
             } else {
-                alert(data.message || 'Erro ao editar participante');
+                showError(data.message || 'Erro ao editar participante');
             }
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao editar participante');
+            showError('Erro ao editar participante');
         });
     }
 

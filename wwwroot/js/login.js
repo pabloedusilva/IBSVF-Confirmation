@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
     const forgotPasswordModal = document.getElementById('forgotPasswordModal');
     const closeForgotModal = document.getElementById('closeForgotModal');
+    
+    // Elementos do modal de erro
+    const loginErrorModal = document.getElementById('loginErrorModal');
+    const closeLoginErrorModal = document.getElementById('closeLoginErrorModal');
+    const okLoginError = document.getElementById('okLoginError');
+    const loginErrorMessage = document.getElementById('loginErrorMessage');
 
     // Toggle para mostrar/ocultar senha
     passwordToggle.addEventListener('click', function () {
@@ -36,6 +42,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Funções para modal de erro
+    function showLoginError(message) {
+        loginErrorMessage.textContent = message;
+        loginErrorModal.classList.add('show');
+    }
+
+    function closeLoginErrorModalFunction() {
+        loginErrorModal.classList.remove('show');
+    }
+
+    // Eventos do modal de erro
+    closeLoginErrorModal.addEventListener('click', closeLoginErrorModalFunction);
+    okLoginError.addEventListener('click', closeLoginErrorModalFunction);
+
+    // Fechar modal de erro ao clicar fora
+    loginErrorModal.addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeLoginErrorModalFunction();
+        }
+    });
+
     // Submissão do formulário de login
     loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -60,13 +87,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Sucesso - redirecionar para o dashboard
                 window.location.href = data.redirectUrl || '/Dashboard';
             } else {
-                // Erro - mostrar mensagem
-                alert(data.message || 'Usuário ou senha incorretos!');
+                // Erro - mostrar modal
+                showLoginError(data.message || 'Usuário ou senha incorretos!');
             }
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao fazer login. Tente novamente.');
+            showLoginError('Erro ao fazer login. Tente novamente.');
         });
     });
 

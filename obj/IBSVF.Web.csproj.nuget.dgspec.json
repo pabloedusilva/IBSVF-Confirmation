@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Documents\\Projetos\\IBSVF-Confirmation\\IBSVF.Web.csproj": {}
+    "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Documents\\Projetos\\IBSVF-Confirmation\\IBSVF.Web.csproj": {
+    "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Documents\\Projetos\\IBSVF-Confirmation\\IBSVF.Web.csproj",
+        "projectUniqueName": "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj",
         "projectName": "IBSVF.Web",
-        "projectPath": "C:\\Users\\user\\Documents\\Projetos\\IBSVF-Confirmation\\IBSVF.Web.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Documents\\Projetos\\IBSVF-Confirmation\\obj\\",
+        "projectPath": "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj",
+        "packagesPath": "C:\\Users\\Alunos\\.nuget\\packages\\",
+        "outputPath": "D:\\IBSVF-Confirmation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Alunos\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -76,24 +75,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[8.0.16, 8.0.16]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.16, 8.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -102,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.412/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

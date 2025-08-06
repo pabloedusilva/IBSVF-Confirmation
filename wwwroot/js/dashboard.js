@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const filterDropdown = document.querySelector('.filter-dropdown');
     const filterBtn = document.querySelector('.filter-btn');
     const emptyState = document.getElementById('emptyState');
-    const exportBtn = document.querySelector('.export-btn');
 
     // Elementos de dropdown do usuário
     const userDropdown = document.getElementById('userDropdown');
@@ -100,35 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentSearch = '';
     let currentParticipantId = null;
     let participants = [];
-
-    // Funcionalidade de exportação
-    exportBtn.addEventListener('click', function () {
-        exportToCSV();
-    });
-
-    function exportToCSV() {
-        if (participants.length === 0) {
-            alert('Não há dados para exportar.');
-            return;
-        }
-
-        const csvContent = 'data:text/csv;charset=utf-8,'
-            + 'Nome,Status,Acompanhantes,Data\n'
-            + participants.map(p => {
-                const companionsStr = p.companions && p.companions.length > 0 ? p.companions.join('; ') : 'Nenhum';
-                const date = p.date ? new Date(p.date).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
-                const status = p.attendance === 'yes' ? 'Confirmado' : 'Não Confirmado';
-                return `"${p.name}","${status}","${companionsStr}","${date}"`;
-            }).join('\n');
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `participantes_family_day_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
 
     // Carrega os dados iniciais
     loadParticipants();

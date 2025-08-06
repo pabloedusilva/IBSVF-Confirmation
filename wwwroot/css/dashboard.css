@@ -317,11 +317,23 @@ body {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .export-btn:hover {
     background-color: #1d5e3a;
+    transform: translateY(-1px);
+    color: white;
+    text-decoration: none;
+}
+
+.export-btn:active {
+    transform: translateY(0);
+}
+
+.export-btn i {
+    font-size: 1rem;
 }
 
 .table-responsive {

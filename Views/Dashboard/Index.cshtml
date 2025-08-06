@@ -1,6 +1,6 @@
 @model IBSVF.Web.Models.DashboardViewModel
 @{
-    ViewData["Title"] = "Dashboard - IBSVF";
+    ViewData["Title"] = "Dashboard";
 }
 
 @section Styles {
@@ -96,8 +96,8 @@
                         </div>
                     </div>
 
-                    <a href="@Url.Action("ExportCsv")" class="export-btn">
-                        <i class="fas fa-download"></i>
+                    <a href="@Url.Action("ExportExcel")" class="export-btn">
+                        <i class="fas fa-file-excel"></i>
                         <span>Exportar</span>
                     </a>
                 </div>

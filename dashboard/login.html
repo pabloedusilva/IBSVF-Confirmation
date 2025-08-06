@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - IBSVF Family Day</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="css/login.css">
+    </head>
+
+    <body>
+        <div class="login-container">
+            <div class="logo-container">
+                <img src="img/logo.png" alt="Logo IBSVF" class="logo">
+            </div>
+
+            <h1 class="login-title">IBSVF</h1>
+            <p class="login-subtitle">Acesse o painel administrativo</p>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuário</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="username" name="username"
+                            class="form-input" placeholder="Digite seu usuário"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" name="password"
+                            class="form-input"
+                            placeholder="Digite sua senha" required>
+                        <button type="button" class="password-toggle"
+                            id="passwordToggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+
+            <a href="#" class="forgot-password" id="forgotPasswordBtn">
+                <i class="fas fa-question-circle"></i>
+                Esqueceu a senha?
+            </a>
+        </div>
+
+        <!-- Modal de Recuperação de Senha -->
+        <div class="modal-overlay" id="forgotPasswordModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-key"></i>
+                        Recuperar Senha
+                    </h3>
+                    <button type="button" class="close-modal"
+                        id="closeForgotModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-text">
+                        Para recuperar sua senha, entre em contato conosco via
+                        WhatsApp.
+                        Nossa equipe irá ajudá-lo a redefinir suas credenciais
+                        de acesso.
+                    </p>
+                    <div style="text-align: center;">
+                        <a
+                            href="https://wa.me/5531985079718?text=Olá,%20preciso%20recuperar%20minha%20senha%20do%20painel%20administrativo%20do%20Family%20Day."
+                            target="_blank" class="whatsapp-contact">
+                            <i class="fab fa-whatsapp"></i>
+                            Entrar em Contato
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Desenvolvido por <a href="https://github.com/pabloedusilva"
+                    class="developer" target="_blank"
+                    rel="noopener noreferrer">Pablo</a></p>
+        </footer>
+
+        <script src="js/login.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
+    </body>
+
+</html>

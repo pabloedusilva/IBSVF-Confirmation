@@ -39,9 +39,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // Adicionar acompanhante
     addCompanionBtn.addEventListener('click', addCompanion);
 
+    // Variável para prevenir múltiplos envios
+    let isSubmitting = false;
+
     // Enviar formulário
     form.addEventListener('submit', function (e) {
         e.preventDefault();
+
+        // Prevenir múltiplos envios
+        if (isSubmitting) {
+            return;
+        }
+
+        isSubmitting = true;
 
         // Coletar dados do formulário
         const formData = new FormData(form);
@@ -59,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 errorModal.classList.add('show');
             }, 10);
+            isSubmitting = false;
             return;
         }
 
@@ -91,11 +102,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 800);
             } else {
                 alert(data.message || 'Erro ao confirmar participação');
+                isSubmitting = false;
             }
         })
         .catch(error => {
             console.error('Erro:', error);
             alert('Erro ao confirmar participação. Tente novamente.');
+            isSubmitting = false;
         });
     });
 
@@ -125,6 +138,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Resetar estados
+            companionsSection.classList.add('hidden');
+            companionList.classList.add('hidden');
+            addCompanionBtn.classList.add('hidden');
+            
+            // Permitir novo envio
+            isSubmitting = false;
             companionsSection.classList.add('hidden');
             companionList.classList.add('hidden');
             addCompanionBtn.classList.add('hidden');

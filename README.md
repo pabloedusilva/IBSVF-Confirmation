@@ -127,7 +127,19 @@ IBSVF-Confirmation/
 
 ## 🚀 Deploy
 
-O projeto está pronto para deploy em qualquer provedor que suporte ASP.NET Core:
+### Railway (Recomendado)
+O projeto está totalmente configurado para deploy no Railway:
+
+1. **Guia Completo**: Consulte `RAILWAY-DEPLOY-GUIDE.md` para instruções detalhadas
+2. **Verificação**: Use `DEPLOYMENT-CHECKLIST.md` para validar o deploy
+3. **Arquivos de Configuração**: 
+   - `Dockerfile` - Container Docker otimizado
+   - `railway.toml` - Configurações do Railway
+   - `.dockerignore` - Otimização de build
+   - `appsettings.Production.json` - Configurações de produção
+
+### Outros Provedores
+O projeto também suporta deploy em:
 - Azure App Service
 - AWS Elastic Beanstalk
 - Google Cloud Run

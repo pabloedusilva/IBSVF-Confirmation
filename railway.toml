@@ -1,0 +1,10 @@
+# Railway Configuration
+[build]
+  builder = "dockerfile"
+
+[deploy]
+  startCommand = "dotnet IBSVF.Web.dll"
+  healthcheckPath = "/"
+  healthcheckTimeout = 100
+  restartPolicyType = "on_failure"
+  restartPolicyMaxRetries = 10

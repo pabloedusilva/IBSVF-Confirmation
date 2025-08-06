@@ -62,38 +62,41 @@ namespace IBSVF.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateParticipant([FromBody] dynamic data)
+        public async Task<IActionResult> UpdateParticipant([FromBody] UpdateParticipantRequest request)
         {
             try
             {
-                int id = data.id;
-                string name = data.name;
-                string attendance = data.attendance;
-                List<string> companions = data.companions?.ToObject<List<string>>() ?? new List<string>();
+                if (request == null)
+                {
+                    return Json(new { success = false, message = "Dados inválidos" });
+                }
 
                 var participante = await _context.Participantes
                     .Include(p => p.Acompanhantes)
-                    .FirstOrDefaultAsync(p => p.Id == id);
+                    .FirstOrDefaultAsync(p => p.Id == request.Id);
 
                 if (participante == null)
                 {
                     return Json(new { success = false, message = "Participante não encontrado" });
                 }
 
-                participante.Nome = name;
-                participante.Comparecimento = attendance;
+                participante.Nome = request.Name;
+                participante.Comparecimento = request.Attendance;
 
                 // Remover acompanhantes existentes
                 _context.Acompanhantes.RemoveRange(participante.Acompanhantes);
 
                 // Adicionar novos acompanhantes
-                foreach (var companionName in companions.Where(c => !string.IsNullOrWhiteSpace(c)))
+                if (request.Companions != null)
                 {
-                    participante.Acompanhantes.Add(new Acompanhante
+                    foreach (var companionName in request.Companions.Where(c => !string.IsNullOrWhiteSpace(c)))
                     {
-                        Nome = companionName.Trim(),
-                        ParticipanteId = participante.Id
-                    });
+                        participante.Acompanhantes.Add(new Acompanhante
+                        {
+                            Nome = companionName.Trim(),
+                            ParticipanteId = participante.Id
+                        });
+                    }
                 }
 
                 await _context.SaveChangesAsync();

@@ -58,4 +58,12 @@ namespace IBSVF.Web.Models
         
         public List<string> Acompanhantes { get; set; } = new List<string>();
     }
+
+    public class UpdateParticipantRequest
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Attendance { get; set; } = string.Empty;
+        public List<string> Companions { get; set; } = new List<string>();
+    }
 }

@@ -3890,11 +3890,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ambiente2\\IBSVF-Confirm\\IBSVF.Web.csproj",
+      "projectUniqueName": "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj",
       "projectName": "IBSVF.Web",
-      "projectPath": "D:\\Ambiente2\\IBSVF-Confirm\\IBSVF.Web.csproj",
+      "projectPath": "D:\\IBSVF-Confirmation\\IBSVF.Web.csproj",
       "packagesPath": "C:\\Users\\Alunos\\.nuget\\packages\\",
-      "outputPath": "D:\\Ambiente2\\IBSVF-Confirm\\obj\\",
+      "outputPath": "D:\\IBSVF-Confirmation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Alunos\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -3966,7 +3966,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.412/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

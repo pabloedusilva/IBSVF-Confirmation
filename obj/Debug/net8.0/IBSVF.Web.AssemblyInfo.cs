@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IBSVF.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2f2f097cd82a370eab8b58f47bba3dbd5b47969")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6db09f3acfbc557a9d9f100898eadcda8a0edefb")]
 [assembly: System.Reflection.AssemblyProductAttribute("IBSVF.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IBSVF.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

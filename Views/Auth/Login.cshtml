@@ -18,12 +18,13 @@
 
     <form id="loginForm">
         @Html.AntiForgeryToken()
-        
+
         <div class="form-group">
             <label for="username">Usuário</label>
             <div class="input-wrapper">
                 <i class="fas fa-user input-icon"></i>
-                <input type="text" id="username" name="username" class="form-input" placeholder="Digite seu usuário" required>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Digite seu usuário"
+                    required>
             </div>
         </div>
 
@@ -31,7 +32,8 @@
             <label for="password">Senha</label>
             <div class="input-wrapper">
                 <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="password" name="password" class="form-input" placeholder="Digite sua senha" required>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Digite sua senha"
+                    required>
                 <button type="button" class="password-toggle" id="passwordToggle">
                     <i class="fas fa-eye"></i>
                 </button>
@@ -68,8 +70,8 @@
                 Nossa equipe irá ajudá-lo a redefinir suas credenciais de acesso.
             </p>
             <div style="text-align: center;">
-                <a href="https://wa.me/5531985079718?text=Olá,%20preciso%20recuperar%20minha%20senha%20do%20painel%20administrativo%20do%20Family%20Day." 
-                   target="_blank" class="whatsapp-contact">
+                <a href="https://wa.me/5531985079718?text=Olá,%20preciso%20recuperar%20minha%20senha%20do%20painel%20administrativo%20do%20Family%20Day."
+                    target="_blank" class="whatsapp-contact">
                     <i class="fab fa-whatsapp"></i>
                     Entrar em Contato
                 </a>
